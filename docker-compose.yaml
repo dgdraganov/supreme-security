@@ -1,0 +1,51 @@
+version: '3.3'
+
+services:
+  # server:   
+  #   container_name: server
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.server
+  #   ports:
+  #     - "9205:9205" 
+  #   restart: unless-stopped
+  #   # env_file:
+  #   #   - dev.env
+  # client:   
+  #   container_name: client
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.client
+  #   restart: unless-stopped
+  server:
+    container_name: server
+    image: golang:1.21
+    working_dir: /app
+    ports:
+      - "9205:9205"
+    tty: true
+    volumes: 
+      - ./:/app
+  client:
+    container_name: client
+    image: golang:1.21
+    working_dir: /app
+    tty: true
+    volumes: 
+      - ./:/app
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

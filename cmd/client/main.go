@@ -2,19 +2,21 @@ package main
 
 import (
 	"crypto/tls"
+	"crypto/x509"
 	"io"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
 
-	// caCert, err := os.ReadFile("cert/ca/ca.crt")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// caCertPool := x509.NewCertPool()
-	// caCertPool.AppendCertsFromPEM(caCert)
+	caCert, err := os.ReadFile("cert/ca/ca.crt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	caCertPool := x509.NewCertPool()
+	caCertPool.AppendCertsFromPEM(caCert)
 
 	cert, err := tls.LoadX509KeyPair(
 		"cert/client/client.crt",
@@ -27,7 +29,7 @@ func main() {
 	client := &http.Client{
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
-				// RootCAs:      caCertPool,
+				RootCAs:      caCertPool,
 				Certificates: []tls.Certificate{cert},
 			},
 		},

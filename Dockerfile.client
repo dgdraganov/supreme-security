@@ -1,1 +1,21 @@
 
+FROM golang:1.21 AS build 
+
+WORKDIR /client
+
+COPY . .
+
+RUN go mod download
+RUN go build -o /client/app cmd/client/main.go
+
+
+FROM ubuntu:22.04
+
+WORKDIR /client
+
+COPY --from=build /client/cert/client/ /client/cert/client/ 
+COPY --from=build /client/cert/ca/ /client/cert/ca/ 
+COPY --from=build /client/app /client/app
+
+CMD ["/client/app"]
+

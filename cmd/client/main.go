@@ -3,24 +3,32 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 func main() {
 
-	caCert, err := os.ReadFile("cert/ca/ca.crt")
+	serverRootCA := os.Getenv("SERVER_ROOT_CA")
+
+	clientCertFile := os.Getenv("CLIENT_CRT")
+	clientKeyFile := os.Getenv("CLIENT_KEY")
+
+	caCert, err := os.ReadFile(serverRootCA)
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(caCert)
 
 	cert, err := tls.LoadX509KeyPair(
-		"cert/client/client.crt",
-		"cert/client/client.unencrypted.key",
+		clientCertFile,
+		clientKeyFile,
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -34,21 +42,27 @@ func main() {
 			},
 		},
 	}
+	host := os.Getenv("HOST")
+	port := os.Getenv("PORT")
+	url := fmt.Sprintf("https://%s:%s/hellos", host, port)
 
-	url := "https://server:9205/hello"
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		log.Fatalf("new request: %s ", err)
+		log.Fatalf("new request: %s", err)
 	}
 
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Fatalf("client do: %s ", err)
-	}
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalf("io read all: %s ", err)
+	for i := 0; true; i++ {
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Fatalf("client do: %s ", err)
+		}
+		respBody, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalf("io read all: %s ", err)
+		}
+
+		log.Printf("[SERVER RESPONSE]: %s", respBody)
+		<-time.After(time.Second * 1)
 	}
 
-	log.Printf("response from server: %s", respBody)
 }

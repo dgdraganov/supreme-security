@@ -1,1 +1,25 @@
 
+
+FROM golang:1.21 AS build 
+
+WORKDIR /server
+
+COPY . .
+
+RUN go mod download
+RUN go build -o /server/app cmd/server/main.go
+
+
+FROM ubuntu:22.04
+
+WORKDIR /server
+
+COPY --from=build /server/cert/server/ /server/cert/server/ 
+COPY --from=build /server/cert/ca/ /server/cert/ca/ 
+COPY --from=build /server/app /server/app
+
+EXPOSE 9205
+CMD ["/server/app"]
+
+
+

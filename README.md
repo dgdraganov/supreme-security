@@ -36,27 +36,35 @@ The below commands were used to generate the certificates needed by this mTLS ex
 
 1. generate [**ca.key**] and [**ca.csr**] command: 
 
-    ```$ openssl req -newkey rsa:2048 -keyout ca.key -out ca.csr```
+    ```
+        $ openssl req -newkey rsa:2048 -keyout ca.key -out ca.csr
+    ```
 
 2. sign [**ca.crt**] from [**ca.csr**] with [**ca.key**]:
 
-    ```$ openssl x509 -signkey ca.key -in ca.csr -req -days 3650 -out ca.crt```
+    ```
+        $ openssl x509 -signkey ca.key -in ca.csr -req -days 3650 -out ca.crt
+    ```
 
 ### Sign certificate
 
 1. sign [**client.crt**] from [**client.csr**] and [**client.ext**] with [**ca.key**] and [**ca.crt**] 
 
-    ```$ openssl x509 -req -CA ca.crt -CAkey ca.key -in client.csr -out client.crt -days 3650 -CAcreateserial -extfile client.ext```
+    ```
+        $ openssl x509 -req -CA ca.crt -CAkey ca.key -in client.csr -out client.crt -days 3650 -CAcreateserial -extfile client.ext
+    ```
 
 ### Remove pass for encrypted key
 
 1. remove password from [**server.key**] -> [**server.unencrypted.key**]
 
-    ```$ openssl rsa -in server.key -out server.unencrypted.key -passin pass:this_is_server_key_password```
+    ```
+        $ openssl rsa -in server.key -out server.unencrypted.key -passin pass:this_is_server_key_password
+    ```
 
 ### Install certificate
 
-1. rhis step is optional instead of using `RootCA` directly in code
+1. this step is optional instead of using `RootCA` directly in code
 
     ```
         ca.crt /usr/local/share/ca-certificates/ca.crt

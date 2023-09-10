@@ -50,13 +50,13 @@ The below commands were used to generate the certificates needed by this mTLS ex
 
 ### Remove pass for encrypted key
 
-1. Remove password from [**server.key**] -> [**server.unencrypted.key**]
+1. remove password from [**server.key**] -> [**server.unencrypted.key**]
 
     ```$ openssl rsa -in server.key -out server.unencrypted.key -passin pass:this_is_server_key_password```
 
 ### Install certificate
 
-1. This step is optional instead of using `RootCA` directly in code
+1. rhis step is optional instead of using `RootCA` directly in code
 
     ```
         ca.crt /usr/local/share/ca-certificates/ca.crt

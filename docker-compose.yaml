@@ -16,7 +16,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.client
-    restart: unless-stopped
     env_file:
       - dev.client.env
 

@@ -32,8 +32,8 @@ func main() {
 	}
 
 	http.HandleFunc("/hellos", func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("%s %s", r.Method, r.URL)
-		w.Write([]byte("This is a secure 'Hello from the server' becasue it is using mutual TLS!"))
+		log.Printf("[SERVER]: %s %s", r.Method, r.URL)
+		w.Write([]byte("This is a secure 'Hello from the server' (hellos) becasue it is using mutual TLS connection!"))
 		if err != nil {
 			log.Printf("response write: %s", err)
 		}

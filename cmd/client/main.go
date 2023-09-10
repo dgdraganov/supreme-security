@@ -51,7 +51,7 @@ func main() {
 		log.Fatalf("new request: %s", err)
 	}
 
-	for i := 0; true; i++ {
+	for i := 0; i < 5; i++ {
 		resp, err := client.Do(req)
 		if err != nil {
 			log.Fatalf("client do: %s ", err)
@@ -61,8 +61,10 @@ func main() {
 			log.Fatalf("io read all: %s ", err)
 		}
 
-		log.Printf("[SERVER RESPONSE]: %s", respBody)
+		log.Printf("[CLIENT]: %s", respBody)
 		<-time.After(time.Second * 1)
 	}
+
+	log.Println("[CLIENT]: shut down")
 
 }

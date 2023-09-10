@@ -1,12 +1,12 @@
-# supreme-security
+# Supreme Security
 
-Project aim is to show an example of mTLS (mutual TLS)
+Project aim is to show an example of mTLS (mutual TLS) communication between client and server:
 
 ## How to run?
 
 The project is equipped with `docker-compose.yaml` file together with all the needed configuration in `dev.server.env` and `dev.client.env` in order to be started:
 
-The following command will start the `server` as well as the `client`:
+The following command will start the `server` as well as the `client` in detached mode:
 
 ```
     make compose
@@ -34,23 +34,23 @@ The below commands were used to generate the certificates needed by this mTLS ex
 
 ### Create root certificate
 
-1. generate [ca.key] and [ca.csr] command: 
+1. generate [**ca.key**] and [**ca.csr**] command: 
 
     ```$ openssl req -newkey rsa:2048 -keyout ca.key -out ca.csr```
 
-2. sign [ca.crt] from [ca.csr] with [ca.key]:
+2. sign [**ca.crt**] from [**ca.csr**] with [**ca.key**]:
 
     ```$ openssl x509 -signkey ca.key -in ca.csr -req -days 3650 -out ca.crt```
 
 ### Sign certificate
 
-1. sign [client.crt] from [client.csr] and [client.ext] with [ca.key] and [ca.crt] 
+1. sign [**client.crt**] from [**client.csr**] and [**client.ext**] with [**ca.key**] and [**ca.crt**] 
 
     ```$ openssl x509 -req -CA ca.crt -CAkey ca.key -in client.csr -out client.crt -days 3650 -CAcreateserial -extfile client.ext```
 
 ### Remove pass for encrypted key
 
-1. Remove password from [server.key] -> [server.unencrypted.key]
+1. Remove password from [**server.key**] -> [**server.unencrypted.key**]
 
     ```$ openssl rsa -in server.key -out server.unencrypted.key -passin pass:this_is_server_key_password```
 

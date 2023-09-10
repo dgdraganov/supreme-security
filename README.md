@@ -67,6 +67,6 @@ The below commands were used to generate the certificates needed by this mTLS ex
 1. this step is optional instead of using `RootCA` directly in code
 
     ```
-        ca.crt /usr/local/share/ca-certificates/ca.crt
+        copy ca.crt /usr/local/share/ca-certificates/ca.crt
         chmod 644 /usr/local/share/ca-certificates/ca.crt && update-ca-certificates
     ```
